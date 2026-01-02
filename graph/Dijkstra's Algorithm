@@ -211,3 +211,52 @@ class Solution {
         return (int) ways[n - 1];
     }
 }
+
+
+/////////   Minimum steps to reach end from start by performing multiplication and mod operations with array elements
+
+/////////this is a nice questions it is only  Dijkstra's Algorithm question here take start as node and times as dist we take dist array of length 100000 
+as all number should be less than it /////////
+// User function Template for Java
+
+import java.util.*;
+
+class Pair {
+    int x, dst;
+    Pair(int x, int dst) {
+        this.x = x;
+        this.dst = dst;
+    }
+}
+
+class Solution {
+    int minimumMultiplications(int[] arr, int start, int end) {
+
+        int[] dist = new int[100000];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        Queue<Pair> q = new LinkedList<>();
+        q.add(new Pair(start, 0));
+        dist[start] = 0;
+
+        while (!q.isEmpty()) {
+            Pair p = q.poll();
+            int x = p.x;
+            int dst = p.dst;
+
+            if (x == end) return dst;
+
+            for (int i = 0; i < arr.length; i++) {
+                int next = (x * arr[i]) % 100000;
+
+                if (dst + 1 < dist[next]) {
+                    dist[next] = dst + 1;
+                    q.add(new Pair(next, dst + 1));
+                }
+            }
+        }
+        return -1;
+    }
+}
+
+
