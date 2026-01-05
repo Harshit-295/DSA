@@ -30,3 +30,36 @@ class Solution {
         return helper(nums, target, 0, dp);
     }
 }
+
+
+/// tabulation appproch is like copy the base case ietrate from 1 to n anf o to target
+
+class Solution {
+    static final int MOD = 1000000007;
+
+    public int perfectSum(int[] nums, int target) {
+        int n = nums.length;
+        int[][] dp = new int[n + 1][target + 1];
+
+        // 🔹 Base case
+        dp[0][0] = 1;
+
+        // 🔹 Fill DP
+        for (int i = 1; i <= n; i++) {
+            for (int t = 0; t <= target; t++) {
+
+                int notPick = dp[i - 1][t];
+                int pick = 0;
+
+                if (t >= nums[i - 1]) {
+                    pick = dp[i - 1][t - nums[i - 1]];
+                }
+
+                dp[i][t] = (pick + notPick) % MOD;
+            }
+        }
+
+        return dp[n][target];
+    }
+}
+
