@@ -1,0 +1,29 @@
+/// 784. Letter Case Permutation
+(* 
+this is a classical problem of take or nottake  *)
+class Solution {
+
+    void helper(String s, int i, String ans, List<String> res) {
+
+        if (i == s.length()) {
+            res.add(ans);
+            return;
+        }
+
+        char ch = s.charAt(i);
+
+        if (Character.isLetter(ch)) {
+            helper(s, i + 1, ans + Character.toLowerCase(ch), res);
+            helper(s, i + 1, ans + Character.toUpperCase(ch), res);
+        }
+        else {
+            helper(s, i + 1, ans + ch, res);
+        }
+    }
+
+    public List<String> letterCasePermutation(String s) {
+        List<String> res = new ArrayList<>();
+        helper(s, 0, "", res);
+        return res;
+    }
+}
