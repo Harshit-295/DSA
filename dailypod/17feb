@@ -1,0 +1,44 @@
+////////////////////////////////////////////   3112 Minimum Time to Visit Disappearing Nodes ////////////////////////////////////
+class Pair {
+    int node;
+    int time;
+
+    Pair(int node, int time) {
+        this.node = node;
+        this.time = time;
+    }
+}
+
+class Solution {
+    public int[] minimumTime(int n, int[][] edges, int[] disappear) {
+        ArrayList<Pair>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();
+        for (int[] e : edges) {
+            int u = e[0], v = e[1], t = e[2];
+            graph[u].add(new Pair(v, t));
+            graph[v].add(new Pair(u, t));
+        }
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[0] = 0;
+        PriorityQueue<Pair> pq =new PriorityQueue<>(Comparator.comparingInt(p -> p.time));
+        pq.add(new Pair(0, 0));
+        while (!pq.isEmpty()) {
+            Pair cur = pq.poll();
+            int u = cur.node;
+            if (cur.time > dist[u]) continue;
+            for (Pair nei : graph[u]) {
+                int v = nei.node;
+                int newTime = dist[u] + nei.time;
+                if (newTime < dist[v] && newTime < disappear[v]) {
+                    dist[v] = newTime;
+                    pq.add(new Pair(v, newTime));
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (dist[i] == Integer.MAX_VALUE) dist[i] = -1;
+        }
+        return dist;
+    }
+}
