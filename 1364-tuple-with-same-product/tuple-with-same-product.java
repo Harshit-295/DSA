@@ -1,21 +1,20 @@
 class Solution {
     public int tupleSameProduct(int[] nums) {
-        HashMap<Integer, Integer> map = new HashMap<>();
+        int n = nums.length;
+        Map<Integer,Integer> map = new HashMap<>();
+        int cnt=0;
 
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                int pro = nums[i] * nums[j];
-                map.put(pro, map.getOrDefault(pro, 0) + 1);
+    for(int i =0; i<n; i++){
+        for(int j =i+1; j< n; j++){
+            int prod = nums[i] * nums[j];
+            if(map.containsKey(prod)){
+             cnt += ( map.get(prod) * 8) ;
+            map.put(prod, map.get(prod)+1);
+            }else{
+                map.put(prod,1);
             }
         }
-
-        int count = 0;
-        for (int val : map.values()) {
-            if (val >= 2) {
-                count += (val * (val - 1) / 2) * 8;
-            }
-        }
-
-        return count;
+    }
+    return cnt;
     }
 }
