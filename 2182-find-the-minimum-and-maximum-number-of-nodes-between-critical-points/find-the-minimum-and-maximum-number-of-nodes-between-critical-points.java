@@ -10,33 +10,38 @@
  */
 class Solution {
     public int[] nodesBetweenCriticalPoints(ListNode head) {
-        ArrayList<Integer> list = new ArrayList<>();
-        ListNode curr = head;
+
+        ListNode prev = head;
+        ListNode curr = head.next;
+        ListNode next = curr.next;
+        int pos = 1;
+        int first = -1;
+        int last = -1;
         int min = Integer.MAX_VALUE;
-        while(curr!=null){
-            list.add(curr.val);
-            curr=curr.next;
-        }
-        ArrayList<Integer> ans = new ArrayList<>();
-        if(list.size()<=2)return new int[]{-1,-1};
-        int prev = list.get(0);
-        int n = list.size();
-        for(int i=1;i<=n-2;i++){
-            int cur = list.get(i);
-            if(cur>prev && cur>list.get(i+1)){
-                ans.add(i);
+        while (next != null) {
+            if ((curr.val > prev.val && curr.val > next.val) ||
+                (curr.val < prev.val && curr.val < next.val)) {
+
+                if (first == -1) {
+                    first = pos;
+                } else {
+                    min = Math.min(min, pos - last);
+                }
+
+                last = pos;
             }
-            else if(cur<prev && cur<list.get(i+1)){
-                ans.add(i);
-            }
-            prev = cur;
+            prev = curr;
+            curr = next;
+            next = next.next;
+            pos++;
         }
-        if(ans.size()<=1)return new int[]{-1,-1};
-        int max = ans.get(ans.size()-1)-ans.get(0);
-        for(int i=1;i<ans.size();i++){
-            min = Math.min(min,ans.get(i)-ans.get(i-1));
+
+        if (first == -1 || first == last) {
+            return new int[]{-1, -1};
         }
-        if(min==Integer.MAX_VALUE) return new int[]{-1,-1};
-        return new int[]{min,max};
+
+        int max = last - first;
+
+        return new int[]{min, max};
     }
 }
